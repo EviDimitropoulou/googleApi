@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" type="text/css" media="screen and (max-width:600px)" href="max-600px.css">
+<link rel="stylesheet" type="text/css" media="(min-width:600px) and (max-width:800px)" href="max-800px.css">
+<link rel="stylesheet" type="text/css" media="(min-width:800px) and (max-width:1024px)" href="max-1024px.css">
+<link rel="stylesheet" type="text/css" media="(min-width:1024px)" href="min-1024px.css">
+</head>
+<body onload="initGeolocation()">
+
+<div id="map"></div>
+<input id="google" class="controls" type="text" placeholder="Search Box" autocomplete="on" >
+<script>
+var mapDiv = document.getElementById("map");
+		var ipnut = document.getElementById('google');
+
+	  function initGeolocation(){
+		if (navigator.geolocation) {
+		navigator.geolocation.getCurrentPosition(myMap,errorCallback);
+		//navigator.geolocation.getCurrentPosition(success[, error[, options]])
+		} else {
+		mapDiv.innerHTML= "Oπεριηγητής δεν υποστηρίζει γεωεντοπισμό.";
+		}
+		};
+		
+		function errorCallback(){
+		switch(error.code){
+		case error.PERMISSION_DENIED:
+		mapDiv.innerHTML="o xrhsths den epitrepete"
+		break;
+		case error.POSITION_UNAVAILANLE:
+		mapDiv.innerHTML="mi diathesimi pliroforia"
+		break;
+		case error.TIMEOUT:
+		mapDiv.innerHTML= "o xronos euresis thesis elikse."
+		break;
+		case error.UNKNOWN_ERROR:
+		mapDiv.innerHTML= "agnwsto lathos."
+		break;
+		}
+		};
+function myMap(position) {
+  //var location=position.coords.latitude+','+position.coords.longitude;
+ // var lng = position.coords.longitude;
+  //var myLatLng = {lat, lng};
+ var lng = position.coords.longitude;
+ var ltd = position.coords.latitude;
+        var mapOptions ={ 
+		 
+          zoom:15,
+		  zoomControl: true,
+		  mapTypeId: google.maps.MapTypeId.ROADMAP,
+          center:new google.maps.LatLng(position.coords.latitude,position.coords.longitude)
+        };
+		var mapDiv = new google.maps.Map(document.getElementById("map"),mapOptions);
+		
+        var markers = new google.maps.Marker({
+          position: mapOptions.center,
+          map: mapDiv,
+          title: 'Hello World!'
+        });
+		
+		  var infowindow = new google.maps.InfoWindow({
+          content: '<h2>Coordinates!</h2>' +
+                    '<h3>Latitude: ' + position.coords.latitude + '</h3>' +
+                    '<h3>Longitude: ' + position.coords.longitude + '</h3>'+
+					'<h3> Accuracy: '+ position.coords.accuracy+ '</h3>'
+        });
+		markers.addListener('click', function() {
+          infowindow.open(mapDiv, markers);
+        });
+	
+			var input = (document.getElementById('google'));
+			var searchBox = new google.maps.places.SearchBox(input);
+			mapDiv.controls[google.maps.ControlPosition.TOP_LEFT].push(input);
+
+			mapDiv.addListener('bounds_changed', function() {
+          searchBox.setBounds(mapDiv.getBounds());
+			});			
+				
+			var autocomplete = new google.maps.places.Autocomplete(input);
+			autocomplete.bindTo('bounds', mapDiv);	  
+			
+			//searchBox.addListener('places_changed', function() {
+            //var places = searchBox.getPlaces();
+
+            //if (places.length == 0) {
+            //return;
+			//}
+		
+			
+	}
+	  
+</script>
+ <script async defer
+ src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD2XG3w_9urhjUAdPv4Nfo-HGJa2lqyXgU&libraries=places">
+    </script>
+	
+</body>
+</html>
